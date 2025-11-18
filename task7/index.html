@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея-слайдер</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="gallery-container">
+        <h1>Галерея изображений</h1>
+        
+        <div class="gallery-wrapper">
+            <button class="btn btn-prev" aria-label="Предыдущие изображения">←</button>
+            
+            <div class="gallery-track">
+                <div class="gallery">
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Горный пейзаж с рекой.jpg" alt="Горный пейзаж с рекой">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Лесная тропинка.jpg" alt="Лесная тропинка">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Медведи в лесу.jpg" alt="Медведи в лесу">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Вид на горы с высоты.jpg" alt="Вид на горы с высоты">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Скалистый берег у моря.jpg" alt="Скалистый берег моря">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Осенний лес.jpg" alt="Осенний лес">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Горное озеро.jpg" alt="Горное озеро">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Городской пейзаж.jpg" alt="Городской пейзаж">
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="slide-inner">
+                            <img src="images/Зимний лес.jpg" alt="Зимний лес">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-next" aria-label="Следующие изображения">→</button>
+        </div>
+        
+        <div class="pager">
+            <div class="pager-dots" id="pagerDots"></div>
+            <div class="pager-text" id="pagerText">Страница 1 из 3</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

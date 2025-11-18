@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой сайт с ссылками и формой</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header">
+        <div class="logo-title-absolute">
+            <div class="logo">
+                <img src="Images/Logo.png" alt="Логотип сайта">
+            </div>
+            <h1 class="site-title">Сайт с ссылочками</h1>
+        </div>
+
+        <nav class="main-nav-absolute">
+            <a href="#links">Ссылки</a>
+            <a href="#table">Таблица</a>
+            <a href="#form">Форма</a>
+            <a href="#footer">Контакты</a>
+        </nav>
+
+        <div class="container">
+            <div class="header-mobile">
+                <div class="logo-title">
+                    <div class="logo">
+                        <img src="Images/Logo.png" alt="Логотип сайта">
+                    </div>
+                    <h1 class="site-title">Сайт с ссылочками</h1>
+                </div>
+                <nav class="main-nav">
+                    <a href="#links">Ссылки</a>
+                    <a href="#table">Таблица</a>
+                    <a href="#form">Форма</a>
+                    <a href="#footer">Контакты</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="main-content">
+            <section id="table">
+                <h2>Таблица данных</h2>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <caption>Типы ссылок на сайте</caption>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Наименование</th>
+                                <th>Тип ссылки</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>КубГУ HTTP</td>
+                                <td>Абсолютная</td>
+                                <td>Активна</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>КубГУ HTTPS</td>
+                                <td>Абсолютная</td>
+                                <td>Активна</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">3</td>
+                                <td>Относительные ссылки</td>
+                                <td>Относительная</td>
+                                <td>Активна</td>
+                            </tr>
+                            <tr>
+                                <td>Фрагменты</td>
+                                <td>Якорная</td>
+                                <td>Активна</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>FTP ссылка</td>
+                                <td>FTP</td>
+                                <td>Тестовая</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Nofollow</td>
+                                <td>SEO</td>
+                                <td>Активна</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="links">
+                <h2>Требуемые гиперссылки</h2>
+                <ul class="links-list">
+                    <li><a href="http://kubsu.ru" target="_blank" rel="noopener">КубГУ (HTTP)</a></li>
+                    <li><a href="https://kubsu.ru" target="_blank" rel="noopener">КубГУ (HTTPS)</a></li>
+                    <li class="image-link">
+                        <a href="https://kubsu.ru" target="_blank" rel="noopener">
+                            <img src="Images/image.jpg" alt="Логотип КубГУ">
+                        </a>
+                    </li>
+                    <li><a href="about.html">Внутренняя страница</a></li>
+                    <li><a href="index.html">Ссылка на главную страницу</a></li>
+                    <li><a href="#form">Фрагмент текущей страницы</a></li>
+                    <li><a href="https://www.google.com/search?q=КубГУ+Краснодар&amp;num=5&amp;hl=ru" target="_blank" rel="noopener">
+                        Поиск КубГУ с 3 параметрами
+                    </a></li>
+                    <li><a href="https://kubsu.ru?id=12345" target="_blank" rel="noopener">КубГУ по id</a></li>
+                    <li><a href="fileInFile.html">Файл в текущем каталоге</a></li>
+                    <li><a href="about/forCatalog.html">Каталог в about</a></li>
+                    <li><a href="../about.html">Уровень выше</a></li>
+                    <li><a href="../../about.html">Уровень на два уровня выше</a></li>
+                    <li>
+                        <p>Просто текст, а далее - ссылка:
+                        <a href="https://kubsu.ru" target="_blank" rel="noopener">Кубанский государственный университет</a></p>
+                    </li>
+                    <li><a href="https://kubsu.ru/ru/university/departments" target="_blank" rel="noopener">Факультеты</a></li>
+                    
+                    <li class="image-map">
+                        <img src="Images/image.jpg" alt="Изображение с кликабельными зонами" usemap="#image-map">
+                        <map name="image-map">
+                            <area shape="rect" coords="0,0,150,150" href="https://kubsu.ru" target="_blank" alt="КубГУ">
+                            <area shape="circle" coords="225,75,50" href="https://google.com" target="_blank" alt="Google">
+                        </map>
+                    </li>
+
+                    <li><a href="#void">Пустой href</a></li>
+                    <li><span class="no-href">Ссылка без href</span></li>
+                    <li><a href="https://kubsu.ru" rel="nofollow" target="_blank" class="nofollow-link">Запрет на переход поисковикам</a></li>
+                    <li><a href="https://kubsu.ru" rel="noindex" target="_blank" class="noindex-link">Запрет для индексации</a></li>
+                    <li>
+                        <p>Нумерованный список ссылок:</p>
+                        <ol class="numbered-links">
+                            <li><a href="https://kubsu.ru" title="Официальный сайт Кубанского государственного университета" 
+                               target="_blank" rel="noopener">КубГУ</a></li>
+                            <li><a href="https://kubsu.ru/ru/university/departments" 
+                               title="Список всех факультетов и кафедр университета" 
+                               target="_blank" rel="noopener">Факультеты КубГУ</a></li>
+                            <li><a href="https://kubsu.ru/ru/abiturient" 
+                               title="Информация для абитуриентов: правила приема, документы, сроки"
+                               target="_blank" rel="noopener">Абитуриентам</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="ftp://student:password123@ftp.kubsu.ru/public/documents/study_materials.zip">
+                        FTP с авторизацией</a></li>
+                </ul>
+            </section>
+
+            <section id="form">
+                <h2>Форма</h2>
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <label for="fio">ФИО:</label>
+                        <input type="text" id="fio" name="fio" placeholder="Иванов Иван Иванович" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Телефон:</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+7(999)999-99-99" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="exampleEmail@mail.ru" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="birthdate">Дата рождения:</label>
+                        <input type="date" id="birthdate" name="birthdate" required>
+                    </div>
+
+                    <fieldset class="form-group">
+                        <legend>Пол:</legend>
+                        <div class="radio-group">
+                            <label for="gender-male">
+                                <input type="radio" id="gender-male" name="gender" value="male" required> 
+                                Мужской
+                            </label>
+                            <label for="gender-female">
+                                <input type="radio" id="gender-female" name="gender" value="female"> 
+                                Женский
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-group">
+                        <label> 
+                            Любимые языки программирования:
+                            <select name="languages[]" multiple size="5" required>
+                                <option>Pascal</option>
+                                <option>C</option>
+                                <option>C++</option>
+                                <option>JavaScript</option>
+                                <option>PHP</option>
+                                <option>Python</option>
+                                <option>Java</option>
+                                <option>Haskell</option>
+                                <option>Clojure</option>
+                                <option>Prolog</option>
+                                <option>Scala</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Биография:</label>
+                        <textarea id="bio" name="bio" rows="4" placeholder="Расскажите о себе..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contract" class="checkbox-label">
+                            <input type="checkbox" id="contract" name="contract" required>
+                            С контрактом ознакомлен(а)
+                        </label>
+                    </div>
+                    
+                    <button type="submit">Сохранить</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer id="footer">
+        <div class="footer-absolute">
+            <p>© Кирилл 2025</p>
+        </div>
+
+        <div class="container">
+            <div class="footer-mobile">
+                <p>© Кирилл 2025</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

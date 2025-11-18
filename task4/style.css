@@ -1,0 +1,111 @@
+/* Дополнительные стили для Bootstrap */
+.logo img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* Абсолютное позиционирование для десктопной версии */
+.logo-title-absolute {
+    display: none;
+}
+
+.main-nav-absolute {
+    display: none;
+}
+
+/* Мобильная версия по умолчанию */
+.header-mobile {
+    display: block;
+}
+
+/* Десктопная версия */
+@media (min-width: 768px) {
+    .header-mobile {
+        display: none;
+    }
+    
+    .logo-title-absolute {
+        display: flex;
+    }
+    
+    .main-nav-absolute {
+        display: flex;
+    }
+    
+    .logo img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (min-width: 992px) {
+    .logo img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    /* Градиент для хедера на больших экранах */
+    header.bg-dark {
+        background: linear-gradient(135deg, #2c3e50, #3498db) !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .logo-title-absolute {
+        left: 40px;
+    }
+    
+    .main-nav-absolute {
+        right: 40px;
+    }
+    
+    .logo img {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Стили для ссылок */
+.links-list a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+    display: block;
+    word-wrap: break-word;
+}
+
+.links-list a:hover {
+    color: #0a58ca;
+}
+
+/* Стили для изображений */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Дополнительные стили для улучшения внешнего вида */
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Стили для улучшения доступности */
+.btn:focus,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Анимации для плавности */
+.card,
+.btn,
+.form-control {
+    transition: all 0.15s ease-in-out;
+}

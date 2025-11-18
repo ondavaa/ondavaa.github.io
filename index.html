@@ -2,82 +2,19 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Задание номер 1</title>
+    <title>Задания</title>
 </head>
 <body>
-    <h1>Список ссылок</h1>
+    <h1>Мои задания</h1>
     <ul>
-        <li> <a href="http://kubsu.ru/">КубГу(http)</a></li>
-        <li> <a href="https://kubsu.ru/">КубГу(https)</a></li>
-        <li> <a href="https://kubsu.ru/"><img src="image.jpg" alt="КубГу" width="224" height="168"></a></li>
-        <li> <a href="/about">Внутренняя страница</a></li>
-        <li> <a href="/">Главная</a></li>
-        <li><a href="#form">Ссылка на сегмент текущей страницы(Переход к форме)</a></li>
-        <li><a href="https://example.com/search?name=ivan&age=20&city=krasnodar">Ссылка с 3 параметрами</a></li>
-        <li><a href="https://example.com/page?id=123"> Ссылка с id</a></li>
-        <li><a href="page.html">Страница в текущем каталоге</a></li>
-        <li><a href="about/page.html">Относительная ссылка на страницу в каталоге about</a></li>
-        <li><a href="../page.html">Относительная ссылка на страницу на уровень выше</a></li>
-        <li><a href="../../page.html">Относительная ссылка на страницу на два уровня выше</a></li>
-        <li><p>Тут текст, а внутри <a href="https://kubsu.ru/">контекстная ссылка</a>.</p></li>
-        <li><a href="https://ru.wikipedia.org/wiki/HTML#История">Ссылка на фрагмент Википедии</a></li>
-        <li>
-            <img src="image.jpg" alt="КубГу" width="224" height="168" usemap="#my-map">
-
-            <map name="my-map">
-                <area shape="rect" coords="0,0,112,168" href="https://kubsu.ru/" alt="Ссылка 1 (КубГу)">
-                <area shape="circle" coords="170,80,40" href="https://example.com" alt="Ссылка 2 (Example)">
-            </map>
-        </li>
-
-
-        <li><a href = "">Ссылка с пустым href</a></li>
-        <li><a>ссылка без href</a></li>
-        <li><a href="https://example.com" rel="nofollow">Запрещено для перехода поисковикам</a></li>
-        <li><a href="https://example.com" rel="nofollow noindex">Запрещено для индексации</a></li>
-        <li>
-            <ol>
-                <li><a href = "https://kubsu.ru/" title="Главная КубГУ">КубГу</a></li>
-                <li><a href="https://example.com" title="Пример сайта">Example</a></li>
-            </ol>
-        </li>
-        <li><a href = "ftp://user:password@ftp.example.com/file.txt">FTP с авторизацией</a></li>
-
+        <li><a href="task1/">Задание 1</a></li>
+        <li><a href="task2/">Задание 2</a></li>
+        <li><a href="task3/">Задание 3</a></li>
+        <li><a href="task4/">Задание 4</a></li>
+        <li><a href="task5/">Задание 5</a></li>
+        <li><a href="task6/">Задание 6</a></li>
+        <li><a href="task7/">Задание 7</a></li>
+        <li><a href="task8/">Задание 8</a></li>
     </ul>
-
-    <h1 id="form">Форма</h1>
-    <form action="#" method="post">
-        <label> ФИО: <input type="text" name="fio" required></label><br><br>
-        <label> Телефон: <input type = "tel" name="phone" placeholder="+7(952)228-14-88" required></label><br><br>
-        <label> Email: <input type="email" name="email" required></label><br><br>
-        <label> Дата рождения: <input type="date" name="birthdate" required></label><br><br>
-
-        Пол:
-        <label><input type="radio" name="gender" value="male" required> Мужской</label>
-        <label><input type="radio" name="gender" value="female" required> Женский</label>
-        <br><br>
-
-        <label> 
-            Любимый язык программирования:
-            <select name = "languages" multiple size="5" required>
-                <option>Pascal</option>
-                <option>C</option>
-                <option>C++</option>
-                <option>JavaScript</option>
-                <option>PHP</option>
-                <option>Python</option>
-                <option>Java</option>
-                <option>Haskell</option>
-                <option>Clojure</option>
-                <option>Prolog</option>
-                <option>Scala</option>
-            </select>
-        </label>
-        <br><br>
-
-        <label> Биография: <br> <textarea name="bio" rows="5" cols="40"></textarea></label><br><br>
-        <label><input type="checkbox" name = "contract" required>С правилами пользования ознакомлен(а)</label><br><br>
-        <input type="submit" value="Сохранить">
-    </form>
 </body>
 </html>
