@@ -2,245 +2,201 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: #f5f7fa;
-    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    color: #333;
+    background: #f8f9fa;
 }
 
 .container {
-    max-width: 800px;
-    width: 100%;
-    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
     text-align: center;
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    color: #2c3e50;
-}
-
-.open-form-btn {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+.open-feedback-btn {
+    background: #007bff;
     color: white;
     border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 50px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
-    transition: all 0.3s ease;
-    font-weight: 600;
+    transition: background 0.3s ease;
 }
 
-.open-form-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
+.open-feedback-btn:hover {
+    background: #0056b3;
 }
 
-.overlay {
+.popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
     display: none;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-}
-
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    z-index: 1001;
-    display: none;
-    padding: 30px;
-}
-
-.popup-header {
-    display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    z-index: 1000;
+    padding: 20px;
 }
 
-.popup-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #2c3e50;
+.popup-content {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
 }
 
 .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
     background: none;
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: #7f8c8d;
-    transition: color 0.3s;
+    color: #666;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .close-btn:hover {
-    color: #e74c3c;
+    color: #333;
 }
 
+.popup-content h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+/* Форма */
 .form-group {
     margin-bottom: 20px;
+    text-align: left;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #2c3e50;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border 0.3s, box-shadow 0.3s;
-}
-
-input:focus, textarea:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-}
-
+input[type="text"],
+input[type="email"],
+input[type="tel"],
 textarea {
-    min-height: 120px;
-    resize: vertical;
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #007bff;
 }
 
 .checkbox-group {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 25px;
+    gap: 10px;
 }
 
-.checkbox-group input {
-    width: auto;
-    margin-right: 10px;
-    margin-top: 5px;
+.checkbox-group input[type="checkbox"] {
+    margin-top: 3px;
+    flex-shrink: 0;
 }
 
 .checkbox-group label {
-    font-weight: normal;
     margin-bottom: 0;
-}
-
-.checkbox-group a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-.checkbox-group a:hover {
-    text-decoration: underline;
+    font-size: 14px;
 }
 
 .submit-btn {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    width: 100%;
+    background: #28a745;
     color: white;
     border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+.submit-btn:hover:not(:disabled) {
+    background: #218838;
 }
 
 .submit-btn:disabled {
-    background: #bdc3c7;
+    background: #6c757d;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
 }
 
-.message {
+.message-container {
+    margin-top: 20px;
     padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: center;
+    border-radius: 6px;
     display: none;
 }
 
-.success {
-    background-color: #d4edda;
+.message-success {
+    background: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 }
 
-.error {
-    background-color: #f8d7da;
+.message-error {
+    background: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
 
 @media (max-width: 768px) {
-    .popup {
-        width: 95%;
+    .popup-content {
+        margin: 10px;
         padding: 20px;
         max-height: 95vh;
+        max-width: none;
     }
-    
-    .popup-title {
-        font-size: 20px;
+
+    .container {
+        padding: 20px 15px;
     }
-    
-    input, textarea {
-        padding: 10px 12px;
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+        padding: 10px;
+        font-size: 16px;
     }
 }
 
-@media (max-width: 480px) {
-    .popup {
-        width: 100%;
-        height: 100%;
-        max-height: 100%;
-        border-radius: 0;
-        padding: 15px;
-    }
-    
-    .popup-header {
-        margin-bottom: 15px;
-    }
-    
-    .form-group {
-        margin-bottom: 15px;
-    }
-    
-    h1 {
-        font-size: 2rem;
+@media (max-height: 700px) and (max-width: 768px) {
+    .popup-content {
+        max-height: 98vh;
+        overflow-y: auto;
     }
 }
