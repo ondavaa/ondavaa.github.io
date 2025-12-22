@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {class FeedbackForm {
         submitBtn.textContent = 'Отправка...';
 
         try {
-            const response = await fetch('https://formcarry.com/s/4dbYuNn864I', {
+            const response = await fetch('https://formcarry.com/s/ywrVs6H3YKS', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -256,3 +256,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
                                                           
 });
+
