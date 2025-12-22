@@ -2,7 +2,7 @@
 /*global document, window, localStorage, fetch, history */
 
 document.addEventListener("DOMContentLoaded", function () {
-  var FORM_ENDPOINT = "https://api.slapform.com/2F49AbGI0";
+  var FORM_ENDPOINT = "https://formcarry.com/s/ywrVs6H3YKS";
 
   var openBtn = document.getElementById("open-contact");
   var overlay = document.getElementById("overlay");
@@ -179,5 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
     restoreFromStorage();
   }
 });
+
 
 
