@@ -1,259 +1,181 @@
-document.addEventListener('DOMContentLoaded', function() {class FeedbackForm {
-    constructor() {
-        this.form = document.getElementById('feedbackForm');
-        this.popup = document.getElementById('popupOverlay');
-        this.messageContainer = document.getElementById('messageContainer');
-        this.storageKey = 'feedbackFormData';
-        
-        this.init();
+/*jslint browser:true */
+/*global document, window, localStorage, fetch, history */
+
+document.addEventListener("DOMContentLoaded", function () {
+  var FORM_ENDPOINT = "https://api.slapform.com/20ua4qR5s";
+
+  var openBtn = document.getElementById("open-contact");
+  var overlay = document.getElementById("overlay");
+  var closeBtn = document.getElementById("close-contact");
+  var cancelBtn = document.getElementById("cancel-btn");
+
+  var form = document.getElementById("contact-form");
+  var statusEl = document.getElementById("form-status");
+  var submitBtn = document.getElementById("submit-btn");
+
+  var fio = document.getElementById("fio");
+  var email = document.getElementById("email");
+  var phone = document.getElementById("phone");
+  var org = document.getElementById("org");
+  var message = document.getElementById("message");
+  var agree = document.getElementById("agree");
+
+  var STORAGE_KEY = "contactForm:v1";
+
+  function openForm() {
+    restoreFromStorage();
+    overlay.className = "overlay open";
+    overlay.setAttribute("aria-hidden", "false");
+    history.pushState({ contactOpen: true }, "", "?contact=open");
+    statusEl.textContent = "";
+    fio.focus();
+  }
+
+  function closeForm() {
+    overlay.className = "overlay";
+    overlay.setAttribute("aria-hidden", "true");
+    statusEl.textContent = "";
+
+    try {
+      history.back();
+    } catch (e) {
     }
+  }
 
-    init() {
-        document.querySelector('.open-feedback-btn').addEventListener('click', () => {
-            this.openForm();
-        });
-
-        document.querySelector('.close-btn').addEventListener('click', () => {
-            this.closeForm();
-        });
-
-        this.popup.addEventListener('click', (e) => {
-            if (e.target === this.popup) {
-                this.closeForm();
-            }
-        });
-
-        this.form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.submitForm();
-        });
-
-        this.form.addEventListener('input', () => {
-            this.saveFormData();
-        });
-
-        this.restoreFormData();
-
-        window.addEventListener('popstate', (e) => {
-            if (this.isFormOpen()) {
-                this.closeForm(false);
-            }
-        });
+  window.addEventListener("popstate", function (evt) {
+    var state = evt.state;
+    if (state && state.contactOpen) {
+      overlay.className = "overlay open";
+      overlay.setAttribute("aria-hidden", "false");
+      restoreFromStorage();
+    } else {
+      overlay.className = "overlay";
+      overlay.setAttribute("aria-hidden", "true");
     }
+  });
 
-    openForm() {
-        this.popup.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        
-        history.pushState({ formOpen: true }, '', '#feedback');
-        
-        document.getElementById('fullName').focus();
+  function saveToStorage() {
+    var obj = {
+      fio: fio.value,
+      email: email.value,
+      phone: phone.value,
+      org: org.value,
+      message: message.value,
+      agree: agree.checked
+    };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    } catch (e) {
     }
+  }
 
-    closeForm(updateHistory = true) {
-        this.popup.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        
-        if (updateHistory && this.isFormOpen()) {
-            history.back();
-        }
+  function restoreFromStorage() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) { return; }
+      var obj = JSON.parse(raw);
+      fio.value = obj.fio || "";
+      email.value = obj.email || "";
+      phone.value = obj.phone || "";
+      org.value = obj.org || "";
+      message.value = obj.message || "";
+      agree.checked = !!obj.agree;
+    } catch (e) {
     }
+  }
 
-    isFormOpen() {
-        return this.popup.style.display === 'flex';
+  function clearFormAndStorage() {
+    form.reset();
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+  }
+
+  function validateForm() {
+    if (!fio.value.trim()) {
+      statusEl.textContent = "Пожалуйста, укажите ФИО.";
+      return false;
     }
-
-    async submitForm() {
-        const formData = new FormData(this.form);
-        const submitBtn = this.form.querySelector('.submit-btn');
-        
-        if (!this.validateForm()) {
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Отправка...';
-
-        try {
-            const response = await fetch('https://formcarry.com/s/ywrVs6H3YKS', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                },
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (result.code === 200) {
-                this.showMessage('Сообщение успешно отправлено!', 'success');
-                this.clearFormData();
-                this.form.reset();
-                
-                setTimeout(() => {
-                    this.closeForm();
-                }, 2000);
-            } else {
-                throw new Error(result.message || 'Ошибка отправки');
-            }
-
-        } catch (error) {
-            console.error('Ошибка:', error);
-            this.showMessage('Ошибка при отправке формы. Попробуйте еще раз.', 'error');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Отправить';
-        }
+    if (!email.value.trim()) {
+      statusEl.textContent = "Пожалуйста, укажите Email.";
+      return false;
     }
-
-    validateForm() {
-        const requiredFields = this.form.querySelectorAll('[required]');
-        let isValid = true;
-
-        // Сбрасываем все ошибки
-        requiredFields.forEach(field => {
-            field.style.borderColor = '#e1e5e9';
-        });
-
-        // Валидация ФИО (только буквы и пробелы)
-        const fullNameField = document.getElementById('fullName');
-        if (fullNameField.value.trim()) {
-            const nameRegex = /^[a-zA-Zа-яА-ЯёЁ\s]+$/;
-            if (!nameRegex.test(fullNameField.value.trim())) {
-                fullNameField.style.borderColor = '#dc3545';
-                isValid = false;
-                this.showMessage('ФИО должно содержать только буквы и пробелы', 'error');
-                return false;
-            }
-        } else {
-            fullNameField.style.borderColor = '#dc3545';
-            isValid = false;
-        }
-
-        // Валидация email
-        const emailField = document.getElementById('email');
-        if (emailField.value.trim()) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(emailField.value.trim())) {
-                emailField.style.borderColor = '#dc3545';
-                isValid = false;
-                this.showMessage('Введите корректный email', 'error');
-                return false;
-            }
-        } else {
-            emailField.style.borderColor = '#dc3545';
-            isValid = false;
-        }
-
-        // Валидация телефона (если заполнен)
-        const phoneField = document.getElementById('phone');
-        if (phoneField.value.trim()) {
-            const phoneRegex = /^[\+]?[0-9\s\-\(\)]+$/;
-            if (!phoneRegex.test(phoneField.value.trim()) || phoneField.value.trim().length < 5) {
-                phoneField.style.borderColor = '#dc3545';
-                isValid = false;
-                this.showMessage('Введите корректный номер телефона', 'error');
-                return false;
-            }
-        }
-
-        // Валидация сообщения (минимум 10 символов)
-        const messageField = document.getElementById('message');
-        if (messageField.value.trim()) {
-            if (messageField.value.trim().length < 10) {
-                messageField.style.borderColor = '#dc3545';
-                isValid = false;
-                this.showMessage('Сообщение должно содержать минимум 10 символов', 'error');
-                return false;
-            }
-        } else {
-            messageField.style.borderColor = '#dc3545';
-            isValid = false;
-        }
-
-        // Валидация чекбокса
-        const privacyField = document.getElementById('privacyPolicy');
-        if (!privacyField.checked) {
-            privacyField.parentElement.style.color = '#dc3545';
-            isValid = false;
-            this.showMessage('Необходимо согласие с политикой обработки данных', 'error');
-            return false;
-        } else {
-            privacyField.parentElement.style.color = '#555';
-        }
-
-        if (!isValid) {
-            this.showMessage('Заполните все обязательные поля правильно', 'error');
-        }
-
-        return isValid;
+    if (!message.value.trim()) {
+      statusEl.textContent = "Пожалуйста, введите сообщение.";
+      return false;
     }
-
-    isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+    if (!agree.checked) {
+      statusEl.textContent = "Необходимо согласиться на обработку персональных данных.";
+      return false;
     }
+    return true;
+  }
 
-    saveFormData() {
-        const formData = {};
-        const formElements = this.form.elements;
-        
-        for (let element of formElements) {
-            if (element.name && element.type !== 'submit') {
-                if (element.type === 'checkbox') {
-                    formData[element.name] = element.checked;
-                } else {
-                    formData[element.name] = element.value;
-                }
-            }
-        }
-        
-        localStorage.setItem(this.storageKey, JSON.stringify(formData));
-    }
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    statusEl.textContent = "";
 
-    restoreFormData() {
-        const savedData = localStorage.getItem(this.storageKey);
-        
-        if (savedData) {
-            const formData = JSON.parse(savedData);
-            
-            for (let [name, value] of Object.entries(formData)) {
-                const element = this.form.elements[name];
-                if (element) {
-                    if (element.type === 'checkbox') {
-                        element.checked = value;
-                    } else {
-                        element.value = value;
-                    }
-                }
-            }
-        }
-    }
+    if (!validateForm()) { return; }
 
-    clearFormData() {
-        localStorage.removeItem(this.storageKey);
-    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Отправка...";
 
-    showMessage(message, type) {
-        this.messageContainer.textContent = message;
-        this.messageContainer.className = `message-container message-${type}`;
-        this.messageContainer.style.display = 'block';
-        
-        setTimeout(() => {
-            this.messageContainer.style.display = 'none';
-        }, 5000);
-    }
-}
+    var payload = {
+      fio: fio.value,
+      email: email.value,
+      phone: phone.value,
+      organization: org.value,
+      message: message.value
+    };
 
-document.addEventListener('DOMContentLoaded', () => {
-    new FeedbackForm();
-    
-    if (window.location.hash === '#feedback') {
-        setTimeout(() => {
-            document.querySelector('.open-feedback-btn').click();
-        }, 100);
-    }
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    }).then(function (resp) {
+      if (!resp.ok) {
+        throw new Error("Сервер вернул ошибку: " + resp.status);
+      }
+      return resp.json();
+    }).then(function (data) {
+      statusEl.style.color = "green";
+      statusEl.textContent = "Спасибо! Ваше сообщение отправлено.";
+      clearFormAndStorage();
+    }).catch(function (err) {
+      statusEl.style.color = "crimson";
+      statusEl.textContent = "Ошибка отправки: " + (err.message || "Попробуйте позже.");
+    }).finally(function () {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Отправить";
+    });
+  });
+
+  fio.addEventListener("input", saveToStorage);
+  email.addEventListener("input", saveToStorage);
+  phone.addEventListener("input", saveToStorage);
+  org.addEventListener("input", saveToStorage);
+  message.addEventListener("input", saveToStorage);
+  agree.addEventListener("change", saveToStorage);
+
+  openBtn.addEventListener("click", function () {
+    openForm();
+  });
+
+  closeBtn.addEventListener("click", function () {
+    closeForm();
+  });
+
+  cancelBtn.addEventListener("click", function () {
+    closeForm();
+  });
+
+  if (window.location.search.indexOf("contact=open") !== -1) {
+    history.replaceState({ contactOpen: true }, "", window.location.href);
+    overlay.className = "overlay open";
+    overlay.setAttribute("aria-hidden", "false");
+    restoreFromStorage();
+  }
 });
-                                                          
-});
-
