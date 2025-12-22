@@ -1,113 +1,258 @@
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Скрипт загружен!');
-    
-    const openFormBtn = document.getElementById('openFormBtn');
-    const closeBtn = document.getElementById('closeBtn');
-    const overlay = document.getElementById('overlay');
-    const popup = document.getElementById('popup');
-    const feedbackForm = document.getElementById('feedbackForm');
-    const messageDiv = document.getElementById('message');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    const STORAGE_KEY = 'feedbackFormData';
-    
-    openFormBtn.addEventListener('click', openForm);
-    closeBtn.addEventListener('click', closeForm);
-    overlay.addEventListener('click', closeForm);
-    
-    window.addEventListener('popstate', function(event) {
-        if (popup.style.display === 'block') {
-            closeForm();
-        }
-    });
-    
-    function loadFormData() {
-        const savedData = localStorage.getItem(STORAGE_KEY);
-        if (savedData) {
-            const formData = JSON.parse(savedData);
-            document.getElementById('fullName').value = formData.fullName || '';
-            document.getElementById('email').value = formData.email || '';
-            document.getElementById('phone').value = formData.phone || '';
-            document.getElementById('organization').value = formData.organization || '';
-            document.getElementById('messageText').value = formData.messageText || '';
-            document.getElementById('consent').checked = formData.consent || false;
-        }
+document.addEventListener('DOMContentLoaded', function() {class FeedbackForm {
+    constructor() {
+        this.form = document.getElementById('feedbackForm');
+        this.popup = document.getElementById('popupOverlay');
+        this.messageContainer = document.getElementById('messageContainer');
+        this.storageKey = 'feedbackFormData';
+        
+        this.init();
     }
-    
-    function saveFormData() {
-        const formData = {
-            fullName: document.getElementById('fullName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            organization: document.getElementById('organization').value,
-            messageText: document.getElementById('messageText').value,
-            consent: document.getElementById('consent').checked
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+
+    init() {
+        document.querySelector('.open-feedback-btn').addEventListener('click', () => {
+            this.openForm();
+        });
+
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            this.closeForm();
+        });
+
+        this.popup.addEventListener('click', (e) => {
+            if (e.target === this.popup) {
+                this.closeForm();
+            }
+        });
+
+        this.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.submitForm();
+        });
+
+        this.form.addEventListener('input', () => {
+            this.saveFormData();
+        });
+
+        this.restoreFormData();
+
+        window.addEventListener('popstate', (e) => {
+            if (this.isFormOpen()) {
+                this.closeForm(false);
+            }
+        });
     }
-    
-    function clearFormData() {
-        localStorage.removeItem(STORAGE_KEY);
-    }
-    
-    function openForm() {
+
+    openForm() {
+        this.popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
         history.pushState({ formOpen: true }, '', '#feedback');
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
-        loadFormData();
-        feedbackForm.addEventListener('input', saveFormData);
-        feedbackForm.addEventListener('change', saveFormData);
+        
         document.getElementById('fullName').focus();
     }
-    
-    function closeForm() {
-        if (history.state && history.state.formOpen) {
+
+    closeForm(updateHistory = true) {
+        this.popup.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        if (updateHistory && this.isFormOpen()) {
             history.back();
         }
-        overlay.style.display = 'none';
-        popup.style.display = 'none';
-        feedbackForm.removeEventListener('input', saveFormData);
-        feedbackForm.removeEventListener('change', saveFormData);
-        hideMessage();
     }
-    
-    function showMessage(text, isSuccess) {
-        messageDiv.textContent = text;
-        messageDiv.className = isSuccess ? 'message success' : 'message error';
-        messageDiv.style.display = 'block';
-        setTimeout(hideMessage, 5000);
+
+    isFormOpen() {
+        return this.popup.style.display === 'flex';
     }
-    
-    function hideMessage() {
-        messageDiv.style.display = 'none';
-    }
-    
-    feedbackForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+
+    async submitForm() {
+        const formData = new FormData(this.form);
+        const submitBtn = this.form.querySelector('.submit-btn');
         
-        if (!document.getElementById('consent').checked) {
-            showMessage('Необходимо согласие с политикой обработки персональных данных', false);
+        if (!this.validateForm()) {
             return;
         }
-        
+
         submitBtn.disabled = true;
         submitBtn.textContent = 'Отправка...';
-        
-        const formData = new FormData(feedbackForm);
-        const data = Object.fromEntries(formData.entries());
-        
-        setTimeout(() => {
-            showMessage('Сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.', true);
-            feedbackForm.reset();
-            clearFormData();
+
+        try {
+            const response = await fetch('https://formcarry.com/s/4dbYuNn864I', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.code === 200) {
+                this.showMessage('Сообщение успешно отправлено!', 'success');
+                this.clearFormData();
+                this.form.reset();
+                
+                setTimeout(() => {
+                    this.closeForm();
+                }, 2000);
+            } else {
+                throw new Error(result.message || 'Ошибка отправки');
+            }
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            this.showMessage('Ошибка при отправке формы. Попробуйте еще раз.', 'error');
+        } finally {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Отправить';
-        }, 1000);
-    });
-    
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && popup.style.display === 'block') {
-            closeForm();
         }
-    });
+    }
+
+    validateForm() {
+        const requiredFields = this.form.querySelectorAll('[required]');
+        let isValid = true;
+
+        // Сбрасываем все ошибки
+        requiredFields.forEach(field => {
+            field.style.borderColor = '#e1e5e9';
+        });
+
+        // Валидация ФИО (только буквы и пробелы)
+        const fullNameField = document.getElementById('fullName');
+        if (fullNameField.value.trim()) {
+            const nameRegex = /^[a-zA-Zа-яА-ЯёЁ\s]+$/;
+            if (!nameRegex.test(fullNameField.value.trim())) {
+                fullNameField.style.borderColor = '#dc3545';
+                isValid = false;
+                this.showMessage('ФИО должно содержать только буквы и пробелы', 'error');
+                return false;
+            }
+        } else {
+            fullNameField.style.borderColor = '#dc3545';
+            isValid = false;
+        }
+
+        // Валидация email
+        const emailField = document.getElementById('email');
+        if (emailField.value.trim()) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailField.value.trim())) {
+                emailField.style.borderColor = '#dc3545';
+                isValid = false;
+                this.showMessage('Введите корректный email', 'error');
+                return false;
+            }
+        } else {
+            emailField.style.borderColor = '#dc3545';
+            isValid = false;
+        }
+
+        // Валидация телефона (если заполнен)
+        const phoneField = document.getElementById('phone');
+        if (phoneField.value.trim()) {
+            const phoneRegex = /^[\+]?[0-9\s\-\(\)]+$/;
+            if (!phoneRegex.test(phoneField.value.trim()) || phoneField.value.trim().length < 5) {
+                phoneField.style.borderColor = '#dc3545';
+                isValid = false;
+                this.showMessage('Введите корректный номер телефона', 'error');
+                return false;
+            }
+        }
+
+        // Валидация сообщения (минимум 10 символов)
+        const messageField = document.getElementById('message');
+        if (messageField.value.trim()) {
+            if (messageField.value.trim().length < 10) {
+                messageField.style.borderColor = '#dc3545';
+                isValid = false;
+                this.showMessage('Сообщение должно содержать минимум 10 символов', 'error');
+                return false;
+            }
+        } else {
+            messageField.style.borderColor = '#dc3545';
+            isValid = false;
+        }
+
+        // Валидация чекбокса
+        const privacyField = document.getElementById('privacyPolicy');
+        if (!privacyField.checked) {
+            privacyField.parentElement.style.color = '#dc3545';
+            isValid = false;
+            this.showMessage('Необходимо согласие с политикой обработки данных', 'error');
+            return false;
+        } else {
+            privacyField.parentElement.style.color = '#555';
+        }
+
+        if (!isValid) {
+            this.showMessage('Заполните все обязательные поля правильно', 'error');
+        }
+
+        return isValid;
+    }
+
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    saveFormData() {
+        const formData = {};
+        const formElements = this.form.elements;
+        
+        for (let element of formElements) {
+            if (element.name && element.type !== 'submit') {
+                if (element.type === 'checkbox') {
+                    formData[element.name] = element.checked;
+                } else {
+                    formData[element.name] = element.value;
+                }
+            }
+        }
+        
+        localStorage.setItem(this.storageKey, JSON.stringify(formData));
+    }
+
+    restoreFormData() {
+        const savedData = localStorage.getItem(this.storageKey);
+        
+        if (savedData) {
+            const formData = JSON.parse(savedData);
+            
+            for (let [name, value] of Object.entries(formData)) {
+                const element = this.form.elements[name];
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = value;
+                    } else {
+                        element.value = value;
+                    }
+                }
+            }
+        }
+    }
+
+    clearFormData() {
+        localStorage.removeItem(this.storageKey);
+    }
+
+    showMessage(message, type) {
+        this.messageContainer.textContent = message;
+        this.messageContainer.className = `message-container message-${type}`;
+        this.messageContainer.style.display = 'block';
+        
+        setTimeout(() => {
+            this.messageContainer.style.display = 'none';
+        }, 5000);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new FeedbackForm();
+    
+    if (window.location.hash === '#feedback') {
+        setTimeout(() => {
+            document.querySelector('.open-feedback-btn').click();
+        }, 100);
+    }
+});
+                                                          
 });
