@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Контакты — пример</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Пример страницы</h1>
+
+    <p>Это демонстрационная страница. Нажми кнопку, чтобы открыть форму обратной связи:</p>
+
+    <button id="open-contact" type="button">Оставить отзыв</button>
+
+    <div id="overlay" class="overlay" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button id="close-contact" class="close" aria-label="Закрыть форму">×</button>
+        <h2 id="modal-title">Форма обратной связи</h2>
+
+        <form id="contact-form" novalidate>
+          <label>
+            ФИО
+            <input id="fio" name="fio" type="text" required maxlength="100" />
+          </label>
+
+          <label>
+            Email
+            <input id="email" name="email" type="email" required />
+          </label>
+
+          <label>
+            Телефон
+            <input id="phone" name="phone" type="tel" pattern="^\+?[0-9\s\-\(\)]{6,20}$" placeholder="+7 (999) 123-45-67" />
+          </label>
+
+          <label>
+            Организация
+            <input id="org" name="organization" type="text" maxlength="100" />
+          </label>
+
+          <label>
+            Сообщение
+            <textarea id="message" name="message" rows="4" required maxlength="1000"></textarea>
+          </label>
+
+          <label class="checkbox">
+            <input id="agree" name="agree" type="checkbox" required />
+            Даю согласие на обработку персональных данных
+          </label>
+
+          <div class="form-actions">
+            <button id="submit-btn" type="submit">Отправить</button>
+            <button id="cancel-btn" type="button">Отмена</button>
+          </div>
+
+          <p id="form-status" class="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>
