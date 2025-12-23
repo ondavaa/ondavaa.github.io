@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Обработка отправки формы на Formcarry
-  const contactForm = document.getElementById('contactForm'); // ИЗМЕНЕНО: было 'contact-form', стало 'contactForm'
+  const contactForm = document.getElementById('contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -141,9 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return response.json();
       })
       .then(data => {
-        console.log('Ответ Formcarry:', data); // Добавлено для отладки
-        
-        if (data.status === 'success' || data.code === 200) {
+        if (data.status === 'success') {
           // Успешная отправка
           alert('Сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.');
           contactForm.reset();
@@ -155,8 +153,8 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .catch(error => {
         // Ошибка сети или другая ошибка
+        alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.');
         console.error('Fetch error:', error);
-        alert('Произошла ошибка при отправке. Пожалуйста, проверьте подключение к интернету и попробуйте снова.');
       })
       .finally(() => {
         // Восстанавливаем кнопку
