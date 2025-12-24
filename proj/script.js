@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Обработка отправки формы на Formcarry
+  // Обработка отправки формы на Slapform
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
@@ -126,13 +126,20 @@ document.addEventListener('DOMContentLoaded', function() {
       submitBtn.textContent = 'Отправка...';
       submitBtn.disabled = true;
       
-      // Отправляем данные на Formcarry
-      fetch('https://formcarry.com/s/ywrVs6H3YKS', {
+      // Конвертируем FormData в объект для Slapform
+      const formObject = {};
+      formData.forEach((value, key) => {
+        formObject[key] = value;
+      });
+      
+      // Отправляем данные на Slapform
+      fetch('https://api.slapform.com/2F49AbGI0', {
         method: 'POST',
-        body: formData,
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
-        }
+        },
+        body: JSON.stringify(formObject)
       })
       .then(response => {
         if (!response.ok) {
@@ -141,14 +148,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return response.json();
       })
       .then(data => {
-        if (data.status === 'success') {
+        // Slapform возвращает успешный ответ даже при ошибках, 
+        // но обычно содержит поле "status"
+        if (data.success || data.status === 'success') {
           // Успешная отправка
           alert('Сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.');
           contactForm.reset();
         } else {
-          // Ошибка от Formcarry
+          // Ошибка от Slapform
           alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.');
-          console.error('Formcarry error:', data);
+          console.error('Slapform error:', data);
         }
       })
       .catch(error => {
