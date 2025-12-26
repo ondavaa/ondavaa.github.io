@@ -768,7 +768,9 @@
 </section>
 
 <!-- Форма внизу -->
- <section class="contact-form-section">
+ <form action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value="0947adcc-0503-4795-bb10-6069a4426e25">
+<section class="contact-form-section">
   <div class="contact-form-content">
     <div class="contact-form-left">
       <h2>Оставить заявку на поддержку сайта</h2>
@@ -785,7 +787,7 @@
       </div>
     </div>
     <div class="contact-form-right">
-      <form id="contact-form" class="contact-form">
+      <form id="contactForm" class="contact-form">
         <div class="form-group">
           <input type="text" id="name" name="name" placeholder="Ваше имя" required>
         </div>
@@ -804,11 +806,17 @@
             Отправляя заявку, я даю согласие на обработку своих персональных данных
           </label>
         </div>
+        <div class="form-group">
+          <div class="captcha">
+            <div class="g-recaptcha" data-sitekey="your_recaptcha_site_key"></div>
+          </div>
+        </div>
         <button type="submit" class="form-submit">СВЯЖИТЕСЬ С НАМИ</button>
       </form>
     </div>
   </div>
- </section> заебал
+</section>
+</form>
 
 <!-- Подвал -->
 <footer class="footer">
@@ -827,4 +835,4 @@
 
 </body>
 
-</html> вот мой HTML внеси сюда изменения чтобы все работало с изменённым skript.JS
+</html>
