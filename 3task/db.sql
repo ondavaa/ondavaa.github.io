@@ -5,6 +5,7 @@ CREATE TABLE applications (
     phone VARCHAR(15) NOT NULL,
     email VARCHAR(100) NOT NULL,
     birthdate DATE NOT NULL,
+    name VARCHAR(150) NOT NULL,
     gender ENUM('male', 'female') NOT NULL,
     bio TEXT NOT NULL,
     contract_agreed BOOLEAN NOT NULL,
