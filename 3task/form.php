@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // если POST — обрабатываем форму
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $pdo = new PDO('mysql:host=localhost;dbname=u82815', 'u82815', 'ТВОЙ_ПАРОЛЬ');
+    $pdo = new PDO('mysql:host=localhost;dbname=u82944', 'u82944', 'dw4$Ewe2');
 
     $name = $_POST['name'] ?? '';
     $phone = $_POST['phone'] ?? '';
